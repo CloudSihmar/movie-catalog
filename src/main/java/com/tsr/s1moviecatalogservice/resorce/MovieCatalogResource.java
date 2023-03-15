@@ -30,12 +30,12 @@ public class MovieCatalogResource {
 		System.out.println("JAVA_HOME Value:- " + System.getenv("JAVA_HOME"));
 		System.out.println("RANA_HOME Value:- " + System.getenv("RANA_HOME"));
 		
-		UserRating ratings = restTemplate.getForObject("http://s3-rating-data-service:8083/ratingsdata/users/"+userId, UserRating.class);
+		UserRating ratings = restTemplate.getForObject("http://movie-rating:8083/ratingsdata/users/"+userId, UserRating.class);
 		//UserRating ratings = restTemplate.getForObject("http://localhost:8083/ratingsdata/users/"+userId, UserRating.class);
 		
 		return ratings.getUserRating().stream().map(rating -> {
 			//Movie movie = restTemplate.getForObject("http://s2-movie-info-service:8082/movies/"+rating.getMovieId(), Movie.class);
-			Movie movie = restTemplate.getForObject("http://p2-movie-info-service:5000/api/v1.0/task/id/"+rating.getMovieId(), Movie.class);
+			Movie movie = restTemplate.getForObject("http://movie-info:5000/api/v1.0/task/id/"+rating.getMovieId(), Movie.class);
 			return new CatalogItem(movie.getName(), "Film of 2000s", rating.getRating());
 		})
 		.collect(Collectors.toList());
